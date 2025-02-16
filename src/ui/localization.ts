@@ -1100,6 +1100,7 @@ const localizeInit = () => {
                     'tooltip.polygon': '多边形选择 ( P )',
                     'tooltip.brush': '画笔 ( B )',
                     'tooltip.sphere': '球选择',
+                    'tooltip.pmarker': '点标记',
                     'tooltip.translate': '移动 ( 1 )',
                     'tooltip.rotate': '旋转 ( 2 )',
                     'tooltip.scale': '缩放 ( 3 )',

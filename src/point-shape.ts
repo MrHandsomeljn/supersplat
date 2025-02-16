@@ -1,0 +1,114 @@
+import {
+    BLENDEQUATION_ADD,
+    BLENDMODE_ONE,
+    BLENDMODE_ONE_MINUS_SRC_ALPHA,
+    BLENDMODE_SRC_ALPHA,
+    CULLFACE_FRONT,
+    CULLFACE_NONE,
+    BlendState,
+    BoundingBox,
+    Entity,
+    ShaderMaterial,
+    Vec3
+} from 'playcanvas';
+
+import { Element, ElementType } from './element';
+import { Serializer } from './serializer';
+import { vertexShader, fragmentShader } from './shaders/pmarker-shape-shader';
+
+const v = new Vec3();
+const bound = new BoundingBox();
+
+class PointShape extends Element {
+    _radius = 0.1;
+    pivot: Entity;
+    material: ShaderMaterial;
+    id: number;
+
+    constructor(radius:number,id:number) {
+        super(ElementType.debug);
+
+        this.pivot = new Entity('spherePivot');
+        this.pivot.addComponent('render', {
+            type: 'sphere'
+        });
+        this._radius = radius;
+        this.id=id;
+        const r = this._radius * 2;
+        this.pivot.setLocalScale(r, r, r);
+    }
+
+    add() {
+        const material = new ShaderMaterial({
+            uniqueName: 'pointShape',
+            vertexCode: vertexShader,
+            fragmentCode: fragmentShader
+        });
+
+        material.setParameter('sphereColor', [1.0, 0.0, 0.0]);
+        material.cull = CULLFACE_NONE;
+        material.blendState = new BlendState(false);
+
+        material.update();
+
+        this.pivot.render.meshInstances[0].material = material;
+        this.pivot.render.layers = [this.scene.debugLayer.id];
+
+        this.material = material;
+
+        this.scene.contentRoot.addChild(this.pivot);
+
+        this.updateBound();
+    }
+
+    remove() {
+        this.scene.contentRoot.removeChild(this.pivot);
+        this.scene.boundDirty = true;
+    }
+
+    destroy() {
+
+    }
+
+    serialize(serializer: Serializer): void {
+        serializer.packa(this.pivot.getWorldTransform().data);
+        serializer.pack(this.radius);
+    }
+
+    onPreRender() {
+        this.pivot.getWorldTransform().getTranslation(v);
+        this.material.setParameter('point', [v.x, v.y, v.z, this.radius]);
+
+        const device = this.scene.graphicsDevice;
+        device.scope.resolve('targetSize').setValue([device.width, device.height]);
+    }
+
+    moved() {
+        this.updateBound();
+    }
+
+    updateBound() {
+        bound.center.copy(this.pivot.getPosition());
+        bound.halfExtents.set(this.radius, this.radius, this.radius);
+        this.scene.boundDirty = true;
+    }
+
+    get worldBound(): BoundingBox | null {
+        return bound;
+    }
+
+    set radius(radius: number) {
+        this._radius = radius;
+
+        const r = this._radius * 2;
+        this.pivot.setLocalScale(r, r, r);
+
+        this.updateBound();
+    }
+    
+    get radius() {
+        return this._radius;
+    }
+}
+
+export { PointShape };

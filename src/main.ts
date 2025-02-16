@@ -18,6 +18,7 @@ import { LassoSelection } from './tools/lasso-selection';
 import { MoveTool } from './tools/move-tool';
 import { PolygonSelection } from './tools/polygon-selection';
 import { RectSelection } from './tools/rect-selection';
+import { PointMarker } from './tools/point-marker';
 import { RotateTool } from './tools/rotate-tool';
 import { ScaleTool } from './tools/scale-tool';
 import { SphereSelection } from './tools/sphere-selection';
@@ -233,6 +234,7 @@ const main = async () => {
     toolManager.register('polygonSelection', new PolygonSelection(events, editorUI.toolsContainer.dom, mask));
     toolManager.register('lassoSelection', new LassoSelection(events, editorUI.toolsContainer.dom, mask));
     toolManager.register('sphereSelection', new SphereSelection(events, scene, editorUI.canvasContainer));
+    toolManager.register('pointMarker', new PointMarker(events, scene, editorUI.canvasContainer));
     toolManager.register('move', new MoveTool(events, scene));
     toolManager.register('rotate', new RotateTool(events, scene));
     toolManager.register('scale', new ScaleTool(events, scene));

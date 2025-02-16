@@ -514,9 +514,12 @@ class Camera extends Element {
         const sx = screenX / target.clientWidth * scene.targetSize.width;
         const sy = screenY / target.clientHeight * scene.targetSize.height;
 
+        console.log(``);
+        console.log(`双击位置: (${screenX}, ${screenY}), sx: ${sx}, sy: ${sy}`);
         const splats = scene.getElementsByType(ElementType.splat);
 
         let closestD = 0;
+        let closestID = -1;
         const closestP = new Vec3();
         let closestSplat = null;
 
@@ -551,6 +554,7 @@ class Camera extends Element {
                         closestD = distance;
                         closestP.copy(vec);
                         closestSplat = splat;
+                        closestID = pickId;
                     }
                 }
             }
@@ -564,6 +568,8 @@ class Camera extends Element {
                 splat: closestSplat,
                 position: closestP
             });
+            console.log(`splat ID: ${closestID}`);
+            console.log(`coordinates: (${closestP.x}, ${closestP.y}, ${closestP.z})`);
         }
     }
 
