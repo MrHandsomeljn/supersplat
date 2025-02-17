@@ -11,7 +11,7 @@ class PointMarker {
     activate: () => void;
     deactivate: () => void;
 
-    points: { [id: string]: PointShape } = {};
+    points: PointShape[] = [];
     scene: Scene;
     
     constructor(
@@ -72,7 +72,7 @@ class PointMarker {
 
         });
         radius.on('change', () => {
-            for (const p of Object.values(this.points)) p.radius = radius.value;
+            for (const p of this.points) p.radius = radius.value;
         });
         let isDragging = false;
         let mouseDownTime = 0;
@@ -88,7 +88,7 @@ class PointMarker {
                 const dragDuration = Date.now() - mouseDownTime;
                 if (dragDuration < 200 && ~isDragging) {
                     const position = this.pickPositionPoint(event.offsetX, event.offsetY);
-                    const point = new PointShape(radius.value,position.closestID);
+                    const point = new PointShape(radius.value, position.closestID);
                     if (position.closestID != -1) {
                         point.pivot.setPosition(position.closestP);
                         this.addMarker(point);
@@ -102,7 +102,7 @@ class PointMarker {
             }
         };
         this.activate = () => {
-            for (const p of Object.values(this.points)) scene.add(p);
+            for (const p of this.points) scene.add(p);
             markerToolbar.hidden = false;
             // parent.addEventListener('auxclick', pointerclick);
             parent.addEventListener('mousedown', onMouseDown);
@@ -120,36 +120,34 @@ class PointMarker {
         };
     }
     addMarker (point: PointShape) {
-        this.points[point.id] = point;
+        this.points.push(point); // Changed to push into list
         this.scene.add(point);
     }
 
     removeMarker (point: PointShape) {
-        if (this.points[point.id]) {
+        const index = this.points.findIndex(p => p.id === point.id);
+        if (index !== -1) {
             this.scene.remove(point);
-            delete this.points[point.id];
+            this.points.splice(index, 1); // Remove from list
         }
     }
     
     clearMarkers () {
-        for (const p of Object.values(this.points)) this.scene.remove(p);
-        this.points = {};
+        for (const p of this.points) this.scene.remove(p);
+        this.points = [];
     }
 
     hideMarkers () {
-        for (const p of Object.values(this.points)) this.scene.remove(p);
+        for (const p of this.points) this.scene.remove(p);
     }
 
     popMarker () {
-        const pointIds = Object.keys(this.points);
-        if (pointIds.length > 0) {
-            const id = pointIds.pop();
-            const p = this.points[id];
+        if (this.points.length > 0) {
+            const p = this.points.pop();
             this.scene.remove(p);
-            delete this.points[id];
         }
     }
-    // intersect the scene at the given screen coordinate and focus the camera on this location
+    // intersect the scene at the given screen coordinate
     pickPositionPoint(screenX: number, screenY: number) {
         const plane = new Plane();
         const ray = new Ray();
@@ -216,13 +214,11 @@ class PointMarker {
         }
         return {closestID, closestP, closestSplat};
     }
-    get lenPointMarker(){
-        return Object.keys(this.points).length;
-    }
+    
     get markersInfo(){
         let info = "";
-        for (const id of Object.keys(this.points)) {
-            info = `${info}${id}:${this.points[id].pivot.getPosition()}\n`;
+        for (const p of this.points) {
+            info = `${info}${p.id}:${p.pivot.getPosition()}\n`;
         }
         return info;
     }
