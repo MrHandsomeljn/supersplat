@@ -5,6 +5,7 @@ import { Events } from '../events';
 import { Scene } from '../scene';
 import { SphereShape } from '../sphere-shape';
 import { Splat } from '../splat';
+import { localize } from 'src/ui/localization';
 
 class SphereSelection {
     activate: () => void;
@@ -35,13 +36,13 @@ class SphereSelection {
             e.stopPropagation();
         });
 
-        const setButton = new Button({ text: 'Set', class: 'select-toolbar-button' });
-        const addButton = new Button({ text: 'Add', class: 'select-toolbar-button' });
-        const removeButton = new Button({ text: 'Remove', class: 'select-toolbar-button' });
+        const setButton = new Button({ text: `${localize("tooltip.sphere_set")}`, class: 'select-toolbar-button' });
+        const addButton = new Button({ text: `${localize("tooltip.sphere_add")}`, class: 'select-toolbar-button' });
+        const removeButton = new Button({ text: `${localize("tooltip.sphere_remove")}`, class: 'select-toolbar-button' });
         const radius = new NumericInput({
             precision: 2,
             value: sphere.radius,
-            placeholder: 'Radius',
+            placeholder: `${localize('tooltip.radius')}`,
             width: 80,
             min: 0.01
         });

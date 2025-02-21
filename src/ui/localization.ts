@@ -170,6 +170,18 @@ const localizeInit = () => {
                     'tooltip.local-space': 'Gizmo in local-space',
                     'tooltip.bound-center': 'Mittelpunkt verwenden',
 
+                    // Bottom toolbar secondary menu
+                    'tooltip.sphere_set': 'Set',
+                    'tooltip.sphere_add': 'Add',
+                    'tooltip.sphere_remove': 'Remove',
+
+                    'tooltip.pmarker_clear': 'Clear',
+                    'tooltip.pmarker_undo' : 'Undo',
+                    'tooltip.pmarker_info' : 'Info',
+                    'tooltip.pmarker_info_hint' : 'Will copy to clipboard. Warning: If used in Meshlab/3DGS-origin, negative xy coordinates are required）',
+
+                    'tooltip.radius': 'Radius',
+
                     // Viewer Export
                     'export.type': 'Export Typ',
                     'export.html': 'HTML',
@@ -1106,6 +1118,18 @@ const localizeInit = () => {
                     'tooltip.scale': '缩放 ( 3 )',
                     'tooltip.local-space': '局部坐标系',
                     'tooltip.bound-center': '使用边界中心',
+
+                    // Bottom toolbar secondary menu
+                    'tooltip.sphere_set': '选择',
+                    'tooltip.sphere_add': '增加选择',
+                    'tooltip.sphere_remove': '取消选择',
+
+                    'tooltip.pmarker_clear': '清空',
+                    'tooltip.pmarker_undo' : '撤销',
+                    'tooltip.pmarker_info' : '复制信息',
+                    'tooltip.pmarker_info_hint' : '将复制到剪贴板。（若用于meshlab/3DGS代码，注意xy坐标需要取负）',
+
+                    'tooltip.radius': '半径',
 
                     // Viewer Export
                     'export.type': '导出类型',

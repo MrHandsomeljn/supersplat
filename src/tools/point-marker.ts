@@ -6,6 +6,7 @@ import { Scene } from '../scene';
 import { Splat } from '../splat';
 import { PointShape } from 'src/point-shape';
 import { Element, ElementType } from '../element';
+import { localize } from 'src/ui/localization';
 
 class PointMarker {
     activate: () => void;
@@ -29,13 +30,13 @@ class PointMarker {
         markerToolbar.dom.addEventListener('pointerdown', (e) => {
             e.stopPropagation();
         });
-        const clearButton = new Button({ text: 'Clear', class: 'marker-toolbar-button' });
-        const undoButton  = new Button({ text: 'Undo',  class: 'marker-toolbar-button' });
-        const infoButton  = new Button({ text: 'Info',  class: 'marker-toolbar-button' });
+        const clearButton = new Button({ text: `${localize("tooltip.pmarker_clear")}`, class: 'marker-toolbar-button' });
+        const undoButton  = new Button({ text: `${localize("tooltip.pmarker_undo")}` , class: 'marker-toolbar-button' });
+        const infoButton  = new Button({ text: `${localize("tooltip.pmarker_info")}` , class: 'marker-toolbar-button' });
         const radius = new NumericInput({
             precision: 3,
             value: 0.03,
-            placeholder: 'Radius',
+            placeholder: `${localize('tooltip.radius')}`,
             width: 90,
             min: 0.001
         });
@@ -58,7 +59,7 @@ class PointMarker {
             e.stopPropagation();
             const info = this.markersInfo;
             if (info != ""){
-                alert(`Will copy to clipboard:\n${info}`);
+                alert(`${(localize("tooltip.pmarker_info_hint"))}:\n${info}`);
                 return navigator.clipboard.writeText(info)
                     .then(() => {
                         console.log("Text copied to clipboard:", info);
